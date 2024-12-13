@@ -10,6 +10,7 @@ RUN apt-get -qq update && \
   DEBIAN_FRONTEND=noninteractive apt-get -yqq install \
     apache2 \
     ldap-utils \
+    mailutils \
     fusiondirectory \
     fusiondirectory-plugin-ldapdump \
     fusiondirectory-plugin-ldapmanager \
