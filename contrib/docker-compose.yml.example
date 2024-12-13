@@ -1,0 +1,27 @@
+services:
+  app:
+    image: fusiondirectory_debian:latest
+    container_name: fusiondirectory
+#    restart: unless-stopped
+    restart: no
+    network_mode: host
+#    ports:
+#      - "8080:80"
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.DaemonName}}.{{.Name}}"
+    environment:
+        CONFIG_CHECK: 0
+        SVCPORT: 80
+    volumes:
+      - type: bind
+        source: /var/log/my_containers/fusiondirectory
+        target: /var/log/apache2
+      - type: bind
+        source: /opt/my_containers/fusiondirectory/etc/fusiondirectory
+        target: /etc/fusiondirectory
+      - type: bind
+        source: /opt/my_containers/fusiondirectory/etc/ldap
+        target: /home/apache2/ldap
+        read_only: true
