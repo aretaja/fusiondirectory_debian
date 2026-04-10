@@ -1,15 +1,17 @@
 # Build image
 ```
-docker build --network=host -t fusiondirectory_debian .
+docker build -t aretaja/fusiondirectory_debian:20260410 .
 ```
 
 # Make config/log environment
 ```
-mkdir -m 0700 -p /opt/my_containers/fusiondirectory \
+addgroup --gid 20000 containers
+mkdir -m 2750 -p /opt/my_containers/fusiondirectory \
+  && chown -R root:containers /opt/my_containers/fusiondirectory \
   && mkdir -p /opt/my_containers/fusiondirectory/etc/fusiondirectory \
   && mkdir -p /opt/my_containers/fusiondirectory/etc/ldap \
-  && mkdir -p /var/log/my_containers/fusiondirectory \
-  && chown -R root:root /opt/my_containers/fusiondirectory \
+  && mkdir -m 2770 -p /var/log/my_containers/fusiondirectory \
+  && chown -R root:containers /var/log/my_containers/fusiondirectory \
   && cp contrib/docker-compose.yml.example /opt/my_containers/fusiondirectory/docker-compose.yml
 ```
 

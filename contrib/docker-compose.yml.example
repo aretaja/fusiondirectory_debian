@@ -4,16 +4,21 @@ services:
     container_name: fusiondirectory
 #    restart: unless-stopped
     restart: no
-    network_mode: host
-#    ports:
-#      - "8080:80"
+    ports:
+      - "127.0.0.1:8080:2180"
     logging:
       driver: syslog
       options:
         tag: "{{.DaemonName}}.{{.Name}}"
     environment:
+        TZ: Europe/Tallinn
         CONFIG_CHECK: 0
-        SVCPORT: 80
+# SMTP settings are optional. Only if sending mail from fusiondirectory is needed
+        SMTP_MAILHUB: smtp.isp.fqn
+        SMTP_PORT: 25
+        SMTP_MAILDOMAIN: myhost.isp.fqn
+        SMTP_MAILHOST: myhost.isp.fqn
+        SMTP_MAILFROMDOMAIN: isp.fqn
     volumes:
       - type: bind
         source: /var/log/my_containers/fusiondirectory
