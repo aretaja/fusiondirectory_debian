@@ -11,7 +11,14 @@ ARG SHARED_NAME=containers
 LABEL org.opencontainers.image.authors="marko[AT]aretaja.org"
 
 # Update and install fusiondirectory
-RUN apt-get -qq update \
+RUN printf '%s\n' \
+      'deb http://archive.debian.org/debian bullseye main' \
+      'deb http://archive.debian.org/debian bullseye-updates main' \
+      'deb http://archive.debian.org/debian-security bullseye-security main' \
+      > /etc/apt/sources.list \
+  && echo 'Acquire::Check-Valid-Until "false";' \
+      > /etc/apt/apt.conf.d/99archive \
+  && apt-get -qq update \
   && DEBIAN_FRONTEND=noninteractive apt-get -yqq dist-upgrade \
   && DEBIAN_FRONTEND=noninteractive apt-get -yqq install \
     apache2 \
@@ -77,6 +84,8 @@ ENV SMTP_MAILFROMDOMAIN=isp.fqn
 # Start script
 WORKDIR /home/apache2
 ADD --chown=${APP_NAME}:${APP_NAME} --chmod=0770 files/start.sh bin/
+ADD files/hp_uploadprogress_guard-7.4.ini /etc/php/7.4/apache2/conf.d/05-hp_uploadprogress_guard-7.4.ini
+ADD files/hp_uploadprogress_guard-7.4.so /usr/lib/php/20190902/hp_uploadprogress_guard-7.4.so
 
 EXPOSE 2180
 
